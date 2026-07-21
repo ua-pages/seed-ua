@@ -1,0 +1,17 @@
+{
+  "name": "@dev-pets/seed",
+  "version": "0.1.0",
+  "description": "Plant life into your web projects.",
+  "type": "module",
+  "bin": {
+    "seed": "./bin/seed.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "start": "node ./bin/seed.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
