@@ -124,7 +124,7 @@ Events: `seed:awake`, `seed:sleep`, `seed:heartbeat`, `seed:remember`, `seed:bor
 ## MVP limitations
 
 - Supports vanilla HTML/JS projects only
-- No framework-specific adapters (React, Vue, Angular)
+- No framework-specific adapters
 - Status shows manifest data; runtime data only in browser
 - Node.js 20+ required
 
