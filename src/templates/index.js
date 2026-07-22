@@ -83,6 +83,48 @@ const seed = {
   life,
   memory,
   components,
+  help() {
+    const commands = {
+      'seed.help()': 'List commands',
+      'seed.status()': 'Show current state',
+      "seed.remember('title')": 'Save a memory',
+      'seed.sleep()': 'Put runtime to sleep',
+      'seed.wake()': 'Awaken runtime',
+      "seed.die('reason', 'note')": 'End local runtime life',
+      'seed.legacy': 'Read the final local record',
+    };
+    console.table(commands);
+    return commands;
+  },
+  status() {
+    const snapshot = this.snapshot();
+    console.log(`🌱 ${snapshot.identity.name} · ${snapshot.life.state}`);
+    console.table(snapshot.life);
+    return snapshot;
+  },
+  remember(title, type = 'note') {
+    if (!title?.trim()) throw new Error('A memory title is required.');
+    return memory.remember({ type, title: title.trim() });
+  },
+  sleep() {
+    life.sleep();
+    return this.snapshot();
+  },
+  wake() {
+    life.wake();
+    return this.snapshot();
+  },
+  die(reason, note = '') {
+    return life.die({ reason, note });
+  },
+  get legacy() {
+    try {
+      const value = localStorage.getItem('seed:legacy');
+      return value ? JSON.parse(value) : null;
+    } catch {
+      return null;
+    }
+  },
   get stage() {
     return calculateStage(life, components);
   },
@@ -94,12 +136,16 @@ const seed = {
         runtimeAge: life.runtimeAge,
         totalAge: life.totalAge,
         state: life.state,
+        heartbeat: life.heartbeat,
+        diedAt: life.diedAt,
       },
       memory: memory.count(),
       components: components.count(),
       stage: this.stage,
+      legacy: this.legacy,
     };
   },
 };
 
 window.seed = seed;
+console.info('🌱 Seed is alive. Try seed.help().');
