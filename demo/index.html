@@ -10,7 +10,7 @@
   </head>
   <body>
     <div class="ambient" aria-hidden="true"></div>
-    <main>
+    <main id="application">
       <header class="topbar">
         <a class="brand" href="https://github.com/ua-pages/seed-ua" aria-label="Seed на GitHub">
           <span class="brand-mark">🌱</span>
@@ -60,7 +60,7 @@
             <div><strong id="age">00:00</strong><span>вік сесії</span></div>
             <div><strong id="awakenings">1</strong><span>пробуджень</span></div>
             <div><strong id="memory-count">0</strong><span>спогадів</span></div>
-            <div><strong id="component-count">0</strong><span>компонентів</span></div>
+            <div><strong id="life-state">awake</strong><span>стан</span></div>
           </div>
           <div class="heartbeat"><span></span><i></i><small>heartbeat healthy</small></div>
         </article>
@@ -75,10 +75,13 @@
           <p class="empty" id="memory-empty">Пам’ять ще тиха.</p>
         </article>
 
-        <article class="components panel">
-          <div class="panel-heading"><span>народжені компоненти</span><span>seed.components</span></div>
-          <div id="component-list" class="component-list" aria-live="polite"></div>
-          <button class="birth" id="birth-component" type="button">+ народити компонент</button>
+        <article class="console-panel panel">
+          <div class="panel-heading"><span>browser console</span><span>window.seed</span></div>
+          <pre><code>seed.help()
+seed.status()
+seed.remember('Перший реліз')
+seed.die('Проєкт завершено')</code></pre>
+          <button class="death-button" id="open-death" type="button">завершити локальне життя</button>
         </article>
       </section>
 
@@ -87,6 +90,37 @@
         <a href="https://github.com/ua-pages/seed-ua">дивитися код ↗</a>
       </footer>
     </main>
+
+    <section class="memorial" id="memorial" aria-labelledby="memorial-title" hidden>
+      <span class="memorial-seed" aria-hidden="true">🌱</span>
+      <span class="memorial-state">heartbeat stopped</span>
+      <h1 id="memorial-title">seed-demo</h1>
+      <p id="memorial-life">—</p>
+      <article>
+        <span>причина завершення</span>
+        <strong id="memorial-reason">—</strong>
+        <span id="memorial-note-label">останній запис</span>
+        <p id="memorial-note">—</p>
+      </article>
+      <button id="new-life" type="button">посадити нове демо</button>
+      <a href="https://github.com/ua-pages/seed-ua">відкрити архів коду ↗</a>
+    </section>
+
+    <dialog id="death-dialog">
+      <form id="death-form">
+        <div class="dialog-heading">
+          <span>завершення життя</span>
+          <button id="close-death" type="button" aria-label="Закрити">×</button>
+        </div>
+        <label>Причина
+          <input id="death-reason" maxlength="100" value="Життєвий цикл демо завершено" required>
+        </label>
+        <label>Останній запис
+          <textarea id="death-note" maxlength="180" placeholder="Що має залишитися після проєкту?"></textarea>
+        </label>
+        <button class="confirm-death" type="submit">зупинити heartbeat</button>
+      </form>
+    </dialog>
     <script type="module" src="./app.js"></script>
   </body>
 </html>
