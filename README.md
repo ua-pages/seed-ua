@@ -32,9 +32,20 @@ terminosfera-ua is alive.
 seed <шлях-до-проєкту>           Посадити насіння в проєкт
 seed status <шлях-до-проєкту>    Показати статус насіння
 seed inspect <шлях-до-проєкту>   Перевірити встановлення насіння
+seed die <шлях-до-проєкту>       Завершити життя й створити надгробок
 seed <шлях-до-проєкту> --commit  Посадити та закомітити в git
 seed <шлях-до-проєкту> --push    Посадити, закомітити та запушити
 ```
+
+## Завершення життя
+
+```bash
+seed die ~/мій-проєкт \
+  --reason "Проєкт замінено новою версією" \
+  --note "Його роботу завершено"
+```
+
+Seed створить `.seed/legacy.json` і статичну сторінку `memorial.html`. Він нічого не видаляє.
 
 ## Приватність
 
@@ -53,9 +64,27 @@ seed.memory       // { remember, all, latest, first, count, clear }
 seed.components   // { born, all, has, count }
 seed.stage        // 'seed' | 'sprout' | 'grow'
 seed.snapshot()   // full current state
+seed.life.sleep() // put runtime to sleep
+seed.life.wake()  // awaken runtime
+seed.die(reason, note) // end local runtime life
+seed.legacy       // final local record after death
 ```
 
 Події: `seed:awake`, `seed:sleep`, `seed:heartbeat`, `seed:remember`, `seed:born`.
+
+### Browser CLI
+
+Відкрийте DevTools Console:
+
+```js
+seed.help()
+seed.status()
+seed.remember('Перший реліз')
+seed.sleep()
+seed.wake()
+seed.die('Проєкт завершено')
+seed.legacy
+```
 
 ## Обмеження MVP
 
@@ -98,9 +127,20 @@ terminosfera-ua is alive.
 seed <project-path>               Plant seed into project
 seed status <project-path>        Show seed status
 seed inspect <project-path>       Inspect seed installation
+seed die <project-path>           End life and create a memorial
 seed <project-path> --commit      Plant and commit with git
 seed <project-path> --push        Plant, commit and push
 ```
+
+## End of life
+
+```bash
+seed die ~/my-project \
+  --reason "The project was replaced" \
+  --note "Its work is complete"
+```
+
+Seed creates `.seed/legacy.json` and a static `memorial.html` page. It never deletes the project.
 
 ## Privacy
 
@@ -119,9 +159,27 @@ seed.memory       // { remember, all, latest, first, count, clear }
 seed.components   // { born, all, has, count }
 seed.stage        // 'seed' | 'sprout' | 'grow'
 seed.snapshot()   // full current state
+seed.life.sleep() // put runtime to sleep
+seed.life.wake()  // awaken runtime
+seed.die(reason, note) // end local runtime life
+seed.legacy       // final local record after death
 ```
 
 Events: `seed:awake`, `seed:sleep`, `seed:heartbeat`, `seed:remember`, `seed:born`.
+
+### Browser CLI
+
+Open the DevTools Console:
+
+```js
+seed.help()
+seed.status()
+seed.remember('First release')
+seed.sleep()
+seed.wake()
+seed.die('The project is complete')
+seed.legacy
+```
 
 ## MVP limitations
 
