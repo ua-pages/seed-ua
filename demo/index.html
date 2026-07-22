@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#09100d">
+    <meta name="description" content="Живе демо Seed — цифрової пам'яті для вебзастосунків.">
+    <title>Seed — живе демо</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true"></div>
+    <main>
+      <header class="topbar">
+        <a class="brand" href="https://github.com/ua-pages/seed-ua" aria-label="Seed на GitHub">
+          <span class="brand-mark">🌱</span>
+          <span>seed</span>
+        </a>
+        <span class="privacy">local-first · без телеметрії</span>
+      </header>
+
+      <section class="hero" aria-labelledby="title">
+        <div class="seed-stage">
+          <button class="seed" id="seed" type="button" aria-label="Доторкнутися до насінини">
+            <span class="seed-glow"></span>
+            <span class="seed-shell"></span>
+            <span class="sprout" aria-hidden="true"><i></i><b></b></span>
+          </button>
+          <span class="stage-label" id="stage-label">стадія: насінина</span>
+        </div>
+
+        <div class="intro">
+          <p class="eyebrow">цифрове життя для вебпроєктів</p>
+          <h1 id="title">Застосунок, який<br><em>пам’ятає себе.</em></h1>
+          <p class="lead">Seed додає проєкту ідентичність, вік, пам’ять і життєвий цикл — локально, прозоро й без зовнішніх сервісів.</p>
+          <div class="command" role="group" aria-label="Команда встановлення">
+            <code>seed ~/мій-проєкт</code>
+            <button id="copy-command" type="button">копіювати</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard" aria-label="Стан демо">
+        <article class="identity panel">
+          <div class="panel-heading">
+            <span>ідентичність</span>
+            <span class="status"><i></i> жива</span>
+          </div>
+          <dl>
+            <div><dt>ім’я</dt><dd>seed-demo</dd></div>
+            <div><dt>вид</dt><dd>application</dd></div>
+            <div><dt>середовище</dt><dd>browser</dd></div>
+            <div><dt>посаджено</dt><dd id="planted-at">—</dd></div>
+          </dl>
+        </article>
+
+        <article class="vitals panel">
+          <div class="panel-heading"><span>життя</span><span>seed.life</span></div>
+          <div class="metrics">
+            <div><strong id="age">00:00</strong><span>вік сесії</span></div>
+            <div><strong id="awakenings">1</strong><span>пробуджень</span></div>
+            <div><strong id="memory-count">0</strong><span>спогадів</span></div>
+            <div><strong id="component-count">0</strong><span>компонентів</span></div>
+          </div>
+          <div class="heartbeat"><span></span><i></i><small>heartbeat healthy</small></div>
+        </article>
+
+        <article class="memory panel">
+          <div class="panel-heading"><span>пам’ять</span><button id="clear-memory" type="button">очистити</button></div>
+          <form id="memory-form">
+            <input id="memory-input" maxlength="80" autocomplete="off" placeholder="Що має запам’ятати застосунок?" aria-label="Новий спогад" required>
+            <button type="submit">запам’ятати</button>
+          </form>
+          <ol id="memory-list" aria-live="polite"></ol>
+          <p class="empty" id="memory-empty">Пам’ять ще тиха.</p>
+        </article>
+
+        <article class="components panel">
+          <div class="panel-heading"><span>народжені компоненти</span><span>seed.components</span></div>
+          <div id="component-list" class="component-list" aria-live="polite"></div>
+          <button class="birth" id="birth-component" type="button">+ народити компонент</button>
+        </article>
+      </section>
+
+      <footer>
+        <p>Seed пам’ятає життя застосунку,<br>але не стежить за життям користувача.</p>
+        <a href="https://github.com/ua-pages/seed-ua">дивитися код ↗</a>
+      </footer>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
