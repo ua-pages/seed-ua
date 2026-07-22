@@ -69,17 +69,37 @@ dd { margin: 0; color: #d8e6dd; font: 13px ui-monospace, monospace; text-align: 
 form { display: flex; gap: 8px; }
 input { min-width: 0; flex: 1; padding: 13px 15px; border: 1px solid var(--line); border-radius: 10px; outline: none; color: var(--text); background: rgba(0,0,0,.2); }
 input:focus { border-color: rgba(116,228,155,.5); }
-form button, .birth { border: 1px solid rgba(116,228,155,.22); border-radius: 10px; padding: 12px 14px; color: var(--green-soft); background: rgba(116,228,155,.08); cursor: pointer; }
+form button { border: 1px solid rgba(116,228,155,.22); border-radius: 10px; padding: 12px 14px; color: var(--green-soft); background: rgba(116,228,155,.08); cursor: pointer; }
 ol { max-height: 155px; margin: 18px 0 0; padding: 0; overflow: auto; list-style: none; }
 ol li { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); color: #d5e3da; font-size: 13px; }
 ol time { color: var(--muted); font: 11px ui-monospace, monospace; }
 .empty { color: var(--muted); font-size: 13px; }
-.component-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 95px; }
-.component-list span { align-self: flex-start; padding: 9px 11px; border: 1px solid var(--line); border-radius: 99px; color: #cfddd4; font: 12px ui-monospace, monospace; }
-.birth { width: 100%; margin-top: 16px; }
+.console-panel pre { margin: 0; padding: 17px; border: 1px solid var(--line); border-radius: 10px; overflow: auto; color: var(--green-soft); background: rgba(0,0,0,.22); font: 12px/1.8 ui-monospace, monospace; }
+.death-button { width: 100%; margin-top: 16px; padding: 12px 14px; border: 1px solid rgba(224,126,112,.2); border-radius: 10px; color: #dda69d; background: rgba(150,70,58,.08); cursor: pointer; }
 footer { display: flex; align-items: end; justify-content: space-between; padding: 75px 0; border-top: 1px solid var(--line); }
 footer p { margin: 0; color: #c7d6cd; font-family: Georgia, serif; font-size: clamp(24px, 4vw, 42px); line-height: 1.2; }
 footer a { color: var(--green); text-decoration: none; }
+
+dialog { width: min(480px, calc(100% - 32px)); padding: 0; border: 1px solid var(--line); border-radius: 16px; color: var(--text); background: #101813; box-shadow: 0 30px 90px rgba(0,0,0,.65); }
+dialog::backdrop { background: rgba(4,8,6,.78); backdrop-filter: blur(6px); }
+dialog form { display: grid; gap: 18px; padding: 24px; }
+.dialog-heading { display: flex; align-items: center; justify-content: space-between; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; font-size: 11px; }
+.dialog-heading button { border: 0; color: var(--muted); background: none; cursor: pointer; font-size: 22px; }
+dialog label { display: grid; gap: 8px; color: #aabbb0; font-size: 12px; }
+dialog input, dialog textarea { width: 100%; resize: vertical; }
+dialog textarea { min-height: 86px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 10px; outline: none; color: var(--text); background: rgba(0,0,0,.2); font: inherit; }
+.confirm-death { padding: 13px 16px; border: 1px solid rgba(224,126,112,.26); border-radius: 10px; color: #f0c2ba; background: rgba(150,70,58,.15); cursor: pointer; }
+.memorial { position: relative; z-index: 2; width: min(620px, calc(100% - 32px)); min-height: 100vh; margin: auto; padding: 14vh 0 70px; text-align: center; }
+.memorial-seed { display: block; margin-bottom: 30px; filter: grayscale(1); opacity: .5; font-size: 52px; }
+.memorial-state { color: #748078; font: 11px ui-monospace, monospace; letter-spacing: .15em; text-transform: uppercase; }
+.memorial h1 { margin: 18px 0 10px; font: 400 clamp(48px, 10vw, 78px) Georgia, serif; letter-spacing: -.05em; }
+.memorial > p { margin: 0 0 40px; color: var(--muted); }
+.memorial article { display: grid; gap: 9px; padding: 28px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); text-align: left; }
+.memorial article span { margin-top: 12px; color: var(--muted); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.memorial article span:first-child { margin-top: 0; }
+.memorial article strong, .memorial article p { margin: 0; color: #dce8e0; font-weight: 400; line-height: 1.6; }
+.memorial button { margin-top: 28px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 10px; color: var(--green-soft); background: rgba(116,228,155,.07); cursor: pointer; }
+.memorial a { display: block; margin-top: 24px; color: var(--muted); text-decoration: none; font-size: 12px; }
 
 @keyframes breathe { 50% { transform: scale(1.025) translateY(-5px); } }
 @keyframes heartbeat { to { left: 100%; } }
