@@ -3,6 +3,7 @@ import { argv, cwd, exit } from 'node:process';
 import { plant } from '../src/cli/plant.js';
 import { status } from '../src/cli/status.js';
 import { inspect } from '../src/cli/inspect.js';
+import { die } from '../src/cli/die.js';
 
 const args = argv.slice(2);
 
@@ -11,9 +12,15 @@ function showHelp() {
   seed <project-path>              Plant seed into project
   seed status <project-path>       Show seed status
   seed inspect <project-path>      Inspect seed installation
+  seed die <project-path>          End life and create a memorial
   seed <project-path> --commit     Plant and commit with git
   seed <project-path> --push       Plant, commit and push
   seed --help                      Show this help`);
+}
+
+function option(name) {
+  const index = args.indexOf(name);
+  return index >= 0 ? args[index + 1] : undefined;
 }
 
 async function main() {
@@ -31,6 +38,14 @@ async function main() {
 
   if (command === 'inspect') {
     await inspect(args[1] || cwd());
+    return;
+  }
+
+  if (command === 'die') {
+    await die(args[1] || cwd(), {
+      reason: option('--reason'),
+      note: option('--note'),
+    });
     return;
   }
 
