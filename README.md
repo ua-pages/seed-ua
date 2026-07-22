@@ -21,7 +21,7 @@ Seed — легковагий zero-dependency CLI та browser runtime для в
 
 ## Встановлення
 
-Потрібен Node.js 20 або новіший.
+Потрібен Node.js 24 або новіший.
 
 ```bash
 git clone https://github.com/ua-pages/seed-ua.git
