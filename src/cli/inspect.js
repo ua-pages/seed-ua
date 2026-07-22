@@ -25,6 +25,8 @@ export async function inspect(projectPath) {
   console.log(`  📍 Origin        ${manifest.origin}`);
   console.log(`  📅 Planted       ${manifest.plantedAt}`);
   console.log(`  🌿 Stage         ${manifest.stage}`);
+  console.log(`  💓 State         ${manifest.state || 'alive'}`);
+  if (manifest.diedAt) console.log(`  🪦 Died          ${manifest.diedAt}`);
   console.log();
 
   let runtimePrefix;

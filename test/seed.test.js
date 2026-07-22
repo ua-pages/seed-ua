@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process';
 import { createManifest, writeManifest, readManifest, isInstalled } from '../src/core/manifest.js';
 import { buildPlan } from '../src/core/plan.js';
 import { isClean } from '../src/git/integration.js';
+import { createLegacy, renderMemorial } from '../src/core/legacy.js';
 
 function tmpDir() {
   return mkdtempSync(join(tmpdir(), 'seed-test-'));
@@ -25,6 +26,7 @@ describe('manifest', () => {
     assert.equal(manifest.environment, 'vanilla');
     assert.equal(manifest.origin, 'tests');
     assert.equal(manifest.stage, 'seed');
+    assert.equal(manifest.state, 'alive');
     assert.ok(manifest.plantedAt);
     assert.deepEqual(manifest.principles, [
       'local-first',
@@ -55,6 +57,35 @@ describe('manifest', () => {
     writeFileSync(join(dir, '.seed', 'seed.json'), '{}');
     assert.equal(await isInstalled(dir), true);
     rmSync(dir, { recursive: true });
+  });
+});
+
+describe('legacy', () => {
+  it('creates a final immutable record', () => {
+    const legacy = createLegacy({
+      name: 'seed-demo',
+      species: 'application',
+      plantedAt: '2026-01-01T00:00:00.000Z',
+    }, {
+      reason: 'Project completed',
+      note: 'Its work is done',
+      diedAt: '2026-02-01T00:00:00.000Z',
+    });
+    assert.equal(legacy.schema, 'seed/legacy/v1');
+    assert.equal(legacy.reason, 'Project completed');
+    assert.equal(legacy.note, 'Its work is done');
+  });
+
+  it('escapes memorial content', () => {
+    const html = renderMemorial({
+      name: '<Seed>',
+      bornAt: '2026-01-01T00:00:00.000Z',
+      diedAt: '2026-01-02T00:00:00.000Z',
+      reason: '<script>alert(1)</script>',
+      note: '',
+    });
+    assert.ok(html.includes('&lt;Seed&gt;'));
+    assert.ok(!html.includes('<script>alert(1)</script>'));
   });
 });
 

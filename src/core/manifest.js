@@ -9,6 +9,7 @@ export function createManifest({ name, environment, origin }) {
     environment,
     origin,
     plantedAt: new Date().toISOString(),
+    state: 'alive',
     stage: 'seed',
     principles: ['local-first', 'lightweight-first', 'privacy-first'],
   };

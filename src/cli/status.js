@@ -18,9 +18,12 @@ export async function status(projectPath) {
   });
 
   console.log(`\n🌱 ${manifest.name}\n`);
-  console.log(`📊 State        planted`);
+  console.log(`📊 State        ${manifest.state || 'alive'}`);
   console.log(`🌿 Stage        ${manifest.stage}`);
   console.log(`📅 Planted      ${plantedDate}`);
+  if (manifest.diedAt) {
+    console.log(`🪦 Died         ${new Date(manifest.diedAt).toLocaleDateString('en-GB')}`);
+  }
   console.log(`🌐 Environment  ${manifest.environment}`);
   console.log(`\n💻 Runtime data  available in browser`);
 }

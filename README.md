@@ -1,137 +1,147 @@
 # 🌱 Seed
 
-Вдихни життя у свої вебпроєкти.
+**Seed спостерігає, як застосунок живе, пам’ятає важливі події та залишає слід після завершення.**
 
-**[Відкрити живе демо →](https://ua-pages.github.io/seed-ua/)**
+[Живе демо](https://ua-pages.github.io/seed-ua/) · [Репозиторій](https://github.com/ua-pages/seed-ua)
 
-Seed — це легкий CLI, який додає цифрове насіння (seed) у ваш вебпроєкт. Він дає застосунку мінімальну ідентичність під час виконання — не контролюючи його, не збираючи даних і не залежачи від зовнішніх сервісів.
+Seed — легковагий zero-dependency CLI та browser runtime для ванільних вебпроєктів. Він додає застосунку ідентичність, вік, пробудження, heartbeat і локальну пам’ять — не керуючи його роботою та не стежачи за користувачем.
+
+Коли життя проєкту завершено, Seed може створити незмінний запис спадщини та статичний надгробок.
+
+## Принцип
+
+```text
+посадити → жити → пам’ятати → завершити → залишити меморіал
+```
+
+- локально;
+- без залежностей і build step;
+- без телеметрії та зовнішніх сервісів;
+- без втручання в бізнес-логіку застосунку.
 
 ## Встановлення
 
+Потрібен Node.js 20 або новіший.
+
 ```bash
-git clone https://github.com/dev-pets/seed.git
-cd seed
+git clone https://github.com/ua-pages/seed-ua.git
+cd seed-ua
 npm link
 ```
 
-Після цього команда `seed` буде доступна глобально.
+Після цього команда `seed` доступна глобально.
 
-## Використання
+## Посадження
 
 ```bash
 seed ~/dev-pets-UA/terminosfera-ua
 ```
 
-```
+```text
 terminosfera-ua is alive.
 ```
 
-## Команди
+Seed створює мінімальну структуру:
 
+```text
+.seed/seed.json
+seed/index.js
+seed/life.js
+seed/memory.js
 ```
-seed <шлях-до-проєкту>           Посадити насіння в проєкт
-seed status <шлях-до-проєкту>    Показати статус насіння
-seed inspect <шлях-до-проєкту>   Перевірити встановлення насіння
-seed <шлях-до-проєкту> --commit  Посадити та закомітити в git
-seed <шлях-до-проєкту> --push    Посадити, закомітити та запушити
+
+Для проєктів із директорією `src/` runtime буде розміщено в `src/seed/`. У ванільний `index.html` автоматично додається module script.
+
+## Browser console
+
+Після посадження у браузері доступний `window.seed`. DevTools Console є природним пультом керування:
+
+```js
+seed.help()                         // список команд
+seed.status()                       // поточний стан
+seed.remember('Перший реліз')       // зберегти спогад
+seed.sleep()                        // приспати локальний runtime
+seed.wake()                         // пробудити
+seed.snapshot()                     // повний знімок стану
+seed.die('Проєкт завершено')        // завершити локальне життя
+seed.legacy                         // фінальний локальний запис
+```
+
+Нижчий рівень API:
+
+```js
+seed.identity
+seed.life
+seed.memory
+seed.stage
+```
+
+Події:
+
+```text
+seed:awake
+seed:sleep
+seed:heartbeat
+seed:remember
+seed:dead
+```
+
+`seed.die()` у браузері змінює лише локальний runtime у поточному браузері. Він не може змінити файли репозиторію.
+
+## Завершення життя проєкту
+
+Канонічне завершення виконує власник через CLI:
+
+```bash
+seed die ~/мій-проєкт \
+  --reason "Проєкт замінено новою версією" \
+  --note "Його роботу завершено"
+```
+
+Seed:
+
+- переводить manifest у стан `dead`;
+- створює `.seed/legacy.json`;
+- створює статичний `memorial.html`;
+- нічого не видаляє.
+
+Надгробок містить ім’я проєкту, час життя, причину завершення та останній запис.
+
+## CLI
+
+```text
+seed <шлях>                         Посадити Seed
+seed status <шлях>                  Показати стан
+seed inspect <шлях>                 Перевірити встановлення
+seed die <шлях> --reason "..."      Завершити життя
+seed <шлях> --commit                Посадити й створити commit
+seed <шлях> --push                  Посадити, commit і push
 ```
 
 ## Приватність
 
-Seed ніколи не збирає персональні дані, не записує дії користувача, не надсилає телеметрію та не робить мережевих запитів. Усі дані виконання зберігаються лише в localStorage браузера.
+Seed не збирає персональні дані, не записує введення користувача, не надсилає телеметрію та не робить мережевих запитів.
 
-> Seed пам'ятає життя застосунку, але не стежить за життям користувача.
+Runtime-дані зберігаються лише в `localStorage` конкретного браузера. Канонічний manifest і спадщина залишаються видимими файлами всередині самого проєкту.
 
-## Runtime API
+> Seed пам’ятає життя застосунку, але не стежить за життям користувача.
 
-Після посадки у браузері стає доступним `window.seed`:
+## Межі MVP
 
-```js
-seed.identity     // { name, species, environment, plantedAt }
-seed.life         // { awakenings, runtimeAge, totalAge, heartbeat, state }
-seed.memory       // { remember, all, latest, first, count, clear }
-seed.components   // { born, all, has, count }
-seed.stage        // 'seed' | 'sprout' | 'grow'
-seed.snapshot()   // full current state
-```
+- підтримуються ванільні HTML/JavaScript-проєкти;
+- адаптерів для фреймворків поки немає;
+- browser runtime і CLI-спадщина навмисно розділені;
+- Seed не аналізує якість коду та не є dev-tool;
+- автоматичного видалення або архівації немає.
 
-Події: `seed:awake`, `seed:sleep`, `seed:heartbeat`, `seed:remember`, `seed:born`.
-
-## Обмеження MVP
-
-- Підтримуються лише ванільні HTML/JS проєкти
-- Немає адаптерів для фреймворків
-- Статус показує дані маніфесту; дані виконання — лише в браузері
-- Потрібен Node.js 20+
-
----
-
-# 🌱 Seed
-
-Plant life into your web projects.
-
-Seed is a lightweight CLI that adds a digital seed to an existing web project. It gives the application a minimal runtime identity — without controlling it, collecting data, or depending on external services.
-
-## Installation
+## Перевірка
 
 ```bash
-git clone https://github.com/dev-pets/seed.git
-cd seed
-npm link
+npm test
 ```
 
-After this, the `seed` command is available globally.
+Використовується вбудований `node:test`.
 
-## Usage
-
-```bash
-seed ~/dev-pets-UA/terminosfera-ua
-```
-
-```
-terminosfera-ua is alive.
-```
-
-## Commands
-
-```
-seed <project-path>               Plant seed into project
-seed status <project-path>        Show seed status
-seed inspect <project-path>       Inspect seed installation
-seed <project-path> --commit      Plant and commit with git
-seed <project-path> --push        Plant, commit and push
-```
-
-## Privacy
-
-Seed never collects personal data, records user input, sends telemetry, or makes network requests. All runtime data stays in the browser's localStorage.
-
-> Seed remembers the life of the application, but does not watch the life of the user.
-
-## Runtime API
-
-After planting, `window.seed` is available in the browser:
-
-```js
-seed.identity     // { name, species, environment, plantedAt }
-seed.life         // { awakenings, runtimeAge, totalAge, heartbeat, state }
-seed.memory       // { remember, all, latest, first, count, clear }
-seed.components   // { born, all, has, count }
-seed.stage        // 'seed' | 'sprout' | 'grow'
-seed.snapshot()   // full current state
-```
-
-Events: `seed:awake`, `seed:sleep`, `seed:heartbeat`, `seed:remember`, `seed:born`.
-
-## MVP limitations
-
-- Supports vanilla HTML/JS projects only
-- No framework-specific adapters
-- Status shows manifest data; runtime data only in browser
-- Node.js 20+ required
-
----
-
-## License
+## Ліцензія
 
 MIT
