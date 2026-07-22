@@ -77,10 +77,15 @@
 
         <article class="console-panel panel">
           <div class="panel-heading"><span>browser console</span><span>window.seed</span></div>
-          <pre><code>seed.help()
-seed.status()
-seed.remember('Перший реліз')
-seed.die('Проєкт завершено')</code></pre>
+          <div class="browser-terminal">
+            <div class="console-output" id="console-output" aria-live="polite">
+              <div class="console-line muted">Введіть <code>seed.help()</code>, щоб побачити команди.</div>
+            </div>
+            <form class="console-form" id="console-form">
+              <span aria-hidden="true">›</span>
+              <input id="console-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Команда Seed" placeholder="seed.status()">
+            </form>
+          </div>
           <button class="death-button" id="open-death" type="button">завершити локальне життя</button>
         </article>
       </section>
