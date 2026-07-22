@@ -74,7 +74,19 @@ ol { max-height: 155px; margin: 18px 0 0; padding: 0; overflow: auto; list-style
 ol li { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); color: #d5e3da; font-size: 13px; }
 ol time { color: var(--muted); font: 11px ui-monospace, monospace; }
 .empty { color: var(--muted); font-size: 13px; }
-.console-panel pre { margin: 0; padding: 17px; border: 1px solid var(--line); border-radius: 10px; overflow: auto; color: var(--green-soft); background: rgba(0,0,0,.22); font: 12px/1.8 ui-monospace, monospace; }
+.browser-terminal { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; color: var(--green-soft); background: rgba(0,0,0,.25); font: 12px/1.6 ui-monospace, monospace; }
+.console-output { height: 132px; padding: 14px 15px; overflow: auto; scrollbar-width: thin; }
+.console-line { margin-bottom: 7px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.console-line:last-child { margin-bottom: 0; }
+.console-line.command { color: #d9e7de; }
+.console-line.command::before { content: "› "; color: var(--green); }
+.console-line.error { color: #dda69d; }
+.console-line.muted { color: var(--muted); }
+.console-line code { color: var(--green-soft); }
+.console-form { display: flex; align-items: center; gap: 9px; padding: 10px 14px; border-top: 1px solid var(--line); }
+.console-form span { color: var(--green); font-weight: 700; }
+.console-form input { flex: 1; padding: 0; border: 0; border-radius: 0; color: var(--green-soft); background: transparent; font: inherit; }
+.console-form input:focus { border: 0; }
 .death-button { width: 100%; margin-top: 16px; padding: 12px 14px; border: 1px solid rgba(224,126,112,.2); border-radius: 10px; color: #dda69d; background: rgba(150,70,58,.08); cursor: pointer; }
 footer { display: flex; align-items: end; justify-content: space-between; padding: 75px 0; border-top: 1px solid var(--line); }
 footer p { margin: 0; color: #c7d6cd; font-family: Georgia, serif; font-size: clamp(24px, 4vw, 42px); line-height: 1.2; }
