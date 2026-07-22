@@ -170,6 +170,33 @@ const help = {
   'seed.legacy': 'Фінальний запис',
 };
 
+function printConsole(value, kind = '') {
+  const line = document.createElement('div');
+  line.className = `console-line ${kind}`.trim();
+  if (typeof value === 'string') {
+    line.textContent = value;
+  } else {
+    line.textContent = JSON.stringify(value, null, 2);
+  }
+  $('#console-output').append(line);
+  $('#console-output').scrollTop = $('#console-output').scrollHeight;
+}
+
+function runConsoleCommand(source) {
+  const command = source.trim();
+  const simple = command.match(/^seed\.(help|status|sleep|wake|snapshot)\(\)$/);
+  if (simple) return window.seed[simple[1]]();
+  if (command === 'seed.legacy') return window.seed.legacy;
+
+  const rememberCommand = command.match(/^seed\.remember\(\s*(['"])(.*?)\1\s*\)$/);
+  if (rememberCommand) return window.seed.remember(rememberCommand[2]);
+
+  const dieCommand = command.match(/^seed\.die\(\s*(['"])(.*?)\1(?:\s*,\s*(['"])(.*?)\3)?\s*\)$/);
+  if (dieCommand) return window.seed.die(dieCommand[2], dieCommand[4] ?? '');
+
+  throw new Error("Невідома команда. Спробуйте seed.help().");
+}
+
 window.seed = {
   identity,
   life: {
@@ -194,6 +221,20 @@ $('#memory-form').addEventListener('submit', event => {
   event.preventDefault();
   remember($('#memory-input').value);
   $('#memory-input').value = '';
+});
+$('#console-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const input = $('#console-input');
+  const command = input.value.trim();
+  if (!command) return;
+  printConsole(command, 'command');
+  input.value = '';
+  try {
+    const result = runConsoleCommand(command);
+    printConsole(result ?? 'null', result == null ? 'muted' : '');
+  } catch (error) {
+    printConsole(error.message, 'error');
+  }
 });
 $('#clear-memory').addEventListener('click', () => { write(KEYS.memory, []); render(); });
 $('#seed').addEventListener('click', () => remember('Дотик до насінини', 'interaction'));
