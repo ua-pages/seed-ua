@@ -222,11 +222,10 @@ $('#memory-form').addEventListener('submit', event => {
   remember($('#memory-input').value);
   $('#memory-input').value = '';
 });
-$('#console-form').addEventListener('submit', event => {
-  event.preventDefault();
+function submitConsoleCommand() {
   const input = $('#console-input');
   const command = input.value.trim();
-  if (!command) return;
+  if (!command) return false;
   printConsole(command, 'command');
   input.value = '';
   try {
@@ -235,6 +234,17 @@ $('#console-form').addEventListener('submit', event => {
   } catch (error) {
     printConsole(error.message, 'error');
   }
+  return false;
+}
+
+$('#console-form').addEventListener('submit', event => {
+  event.preventDefault();
+  submitConsoleCommand();
+});
+$('#console-input').addEventListener('keydown', event => {
+  if (event.key !== 'Enter' || event.isComposing) return;
+  event.preventDefault();
+  submitConsoleCommand();
 });
 $('#clear-memory').addEventListener('click', () => { write(KEYS.memory, []); render(); });
 $('#seed').addEventListener('click', () => remember('Дотик до насінини', 'interaction'));
