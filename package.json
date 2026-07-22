@@ -11,7 +11,7 @@
     "start": "node ./bin/seed.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "license": "MIT"
 }
