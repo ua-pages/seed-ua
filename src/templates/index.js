@@ -1,5 +1,6 @@
 import { createLife } from './life.js';
 import { createMemory } from './memory.js';
+__PWA_IMPORT__
 
 const IDENTITY = JSON.parse('__IDENTITY_JSON__');
 
@@ -51,6 +52,7 @@ function calculateStage(life, components) {
 const life = createLife(IDENTITY);
 const memory = createMemory();
 const components = createComponents();
+__PWA_INIT__
 
 life.onAwake(() => {
   window.dispatchEvent(new CustomEvent('seed:awake', {
@@ -83,6 +85,7 @@ const seed = {
   life,
   memory,
   components,
+  pwa,
   help() {
     const commands = {
       'seed.help()': 'List commands',
@@ -92,6 +95,8 @@ const seed = {
       'seed.wake()': 'Awaken runtime',
       "seed.die('reason', 'note')": 'End local runtime life',
       'seed.legacy': 'Read the final local record',
+      'seed.pwa.install()': 'Install as PWA',
+      'seed.pwa.status()': 'Check PWA status',
     };
     console.table(commands);
     return commands;
@@ -143,6 +148,11 @@ const seed = {
       components: components.count(),
       stage: this.stage,
       legacy: this.legacy,
+      pwa: pwa ? {
+        canInstall: pwa.canInstall,
+        isInstalled: pwa.isInstalled,
+        isReady: pwa.isReady,
+      } : null,
     };
   },
 };

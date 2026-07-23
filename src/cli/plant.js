@@ -62,8 +62,12 @@ export async function plant(targetPath, options = {}) {
 
   const origin = basename(dirname(projectPath));
 
+  const pwa = options.pwa;
+
   console.log(`📦 Project       ${name}`);
-  console.log(`🌐 Environment   ${environment}\n`);
+  console.log(`🌐 Environment   ${environment}`);
+  if (pwa) console.log(`📱 PWA mode      enabled\n`);
+  else console.log();
 
   if ((options.commit || options.push) && (await hasGitRepo(projectPath))) {
     if (!(await isClean(projectPath))) {
@@ -79,6 +83,25 @@ export async function plant(targetPath, options = {}) {
     throw new Error('Cannot plant: some files already exist.');
   }
 
+  if (pwa) {
+    const pwaConflicts = ['sw.js', 'manifest.json'];
+    const found = [];
+    for (const f of pwaConflicts) {
+      try {
+        await access(join(projectPath, f));
+        found.push(f);
+      } catch {}
+    }
+    if (found.length > 0) {
+      console.error('PWA conflicts found:');
+      found.forEach(f => console.error(`  ${f}`));
+      throw new Error('Cannot plant: some PWA files already exist.');
+    }
+  }
+
+  if (pwa) {
+    console.log('📱 Enabling PWA mode...');
+  }
   console.log('🌱 Planting seed...');
   console.log('🪪  Creating identity...');
   console.log('🧠 Connecting memory...');
@@ -100,6 +123,7 @@ export async function plant(targetPath, options = {}) {
     createdItems.push('.seed/seed.json');
 
     const templateFiles = ['index.js', 'life.js', 'memory.js'];
+    if (pwa) templateFiles.push('pwa.js');
     for (const tf of templateFiles) {
       let content = await readFile(join(TEMPLATES_DIR, tf), 'utf-8');
       if (tf === 'index.js') {
@@ -113,6 +137,12 @@ export async function plant(targetPath, options = {}) {
           .replace(/\\/g, '\\\\')
           .replace(/'/g, "\\'");
         content = content.replace('__IDENTITY_JSON__', escaped);
+        content = content.replace('__PWA_IMPORT__', pwa
+          ? "import { createPWA } from './pwa.js';"
+          : '');
+        content = content.replace('__PWA_INIT__', pwa
+          ? 'const pwa = createPWA(IDENTITY);'
+          : 'const pwa = null;');
       }
       const targetFile = join(projectPath, runtimeDir, tf);
       await writeFile(targetFile, content);
@@ -121,10 +151,41 @@ export async function plant(targetPath, options = {}) {
       createdItems.push(relPath);
     }
 
+    if (pwa) {
+      const swContent = await readFile(join(TEMPLATES_DIR, 'sw.js'), 'utf-8');
+      await writeFile(join(projectPath, 'sw.js'), swContent);
+      allCreatedFiles.push('sw.js');
+      createdItems.push('sw.js');
+
+      const webManifest = {
+        name,
+        short_name: name,
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#090d0b',
+        theme_color: '#090d0b',
+        icons: [],
+      };
+      await writeFile(
+        join(projectPath, 'manifest.json'),
+        JSON.stringify(webManifest, null, 2) + '\n'
+      );
+      allCreatedFiles.push('manifest.json');
+      createdItems.push('manifest.json');
+    }
+
     if (entryFile) {
       const originalHtml = await readFile(join(projectPath, entryFile), 'utf-8');
+      let headTags = '';
+      if (pwa) {
+        headTags += `  <link rel="manifest" href="/manifest.json">\n`;
+        headTags += `  <meta name="theme-color" content="#090d0b">\n`;
+      }
       const scriptTag = `  <script type="module" src="${runtimeRelPath}"></script>\n`;
       let html = originalHtml;
+      if (headTags && html.includes('</head>')) {
+        html = html.replace('</head>', `${headTags}</head>`);
+      }
       if (html.includes('</body>')) {
         html = html.replace('</body>', `${scriptTag}</body>`);
       } else if (html.includes('</html>')) {

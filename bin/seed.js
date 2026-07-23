@@ -15,6 +15,8 @@ function showHelp() {
   seed die <project-path>          End life and create a memorial
   seed <project-path> --commit     Plant and commit with git
   seed <project-path> --push       Plant, commit and push
+  seed <project-path> --pwa        Plant with PWA support
+  seed <project-path> --pwa --commit  Plant with PWA and commit
   seed --help                      Show this help`);
 }
 
@@ -53,6 +55,7 @@ async function main() {
     commit: args.includes('--commit') || args.includes('--push'),
     push: args.includes('--push'),
     yes: args.includes('--yes'),
+    pwa: args.includes('--pwa'),
   });
 }
 
