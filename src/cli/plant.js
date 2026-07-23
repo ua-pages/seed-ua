@@ -86,6 +86,8 @@ export async function plant(targetPath, options = {}) {
 
   const createdItems = [];
   const allCreatedFiles = [];
+  const modifiedFiles = [];
+  const originalContent = new Map();
 
   try {
     for (const dir of plan.createdDirs) {
@@ -120,8 +122,9 @@ export async function plant(targetPath, options = {}) {
     }
 
     if (entryFile) {
-      let html = await readFile(join(projectPath, entryFile), 'utf-8');
+      const originalHtml = await readFile(join(projectPath, entryFile), 'utf-8');
       const scriptTag = `  <script type="module" src="${runtimeRelPath}"></script>\n`;
+      let html = originalHtml;
       if (html.includes('</body>')) {
         html = html.replace('</body>', `${scriptTag}</body>`);
       } else if (html.includes('</html>')) {
@@ -130,7 +133,8 @@ export async function plant(targetPath, options = {}) {
         html += `\n${scriptTag}`;
       }
       await writeFile(join(projectPath, entryFile), html);
-      allCreatedFiles.push(entryFile);
+      originalContent.set(entryFile, originalHtml);
+      modifiedFiles.push(entryFile);
       createdItems.push(`${entryFile} (modified)`);
     }
 
@@ -139,7 +143,7 @@ export async function plant(targetPath, options = {}) {
 
     if (options.commit || options.push) {
       if (await hasGitRepo(projectPath)) {
-        await gitCommit(projectPath, allCreatedFiles);
+        await gitCommit(projectPath, [...allCreatedFiles, ...modifiedFiles]);
         console.log('  ✅ git commit created');
 
         if (options.push) {
@@ -154,6 +158,13 @@ export async function plant(targetPath, options = {}) {
     console.log(`\n✅ Seed planted successfully.`);
     console.log(`✨ ${name} is alive.`);
   } catch (err) {
+    for (const [file, content] of originalContent) {
+      try {
+        await writeFile(join(projectPath, file), content);
+      } catch {
+        // ignore rollback errors
+      }
+    }
     for (const item of [...allCreatedFiles].reverse()) {
       try {
         await rm(join(projectPath, item), { force: true });
